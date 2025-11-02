@@ -15,15 +15,15 @@ public class SiaptaApp extends JFrame {
         JTextField namaDosenField = new JTextField();
         JTextField nipDosenField = new JTextField();
         Object[] loginForm = {
-            "Nama Dosen:", namaDosenField,
-            "NIP Dosen:", nipDosenField
+                "Nama Dosen:", namaDosenField,
+                "NIP Dosen:", nipDosenField
         };
 
         int option = JOptionPane.showConfirmDialog(
-            null,
-            loginForm,
-            "Login Dosen - SIAPTA",
-            JOptionPane.OK_CANCEL_OPTION
+                null,
+                loginForm,
+                "Login Dosen - SIAPTA",
+                JOptionPane.OK_CANCEL_OPTION
         );
 
         if (option == JOptionPane.OK_OPTION) {
@@ -32,10 +32,10 @@ public class SiaptaApp extends JFrame {
 
             if (namaDosen.isEmpty() || nipDosen.isEmpty()) {
                 JOptionPane.showMessageDialog(
-                    null,
-                    "Nama dan NIP dosen tidak boleh kosong!",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
+                        null,
+                        "Nama dan NIP dosen tidak boleh kosong!",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
                 );
                 System.exit(0);
             }
@@ -46,15 +46,14 @@ public class SiaptaApp extends JFrame {
             System.exit(0);
         }
 
-       
+
         setTitle("SIAPTA - Sistem Informasi Pembimbingan Tugas Akhir");
-        setSize(550, 430);
+        setSize(600, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null);
 
-        
-        JPanel inputPanel = new JPanel(new GridLayout(3, 2, 8, 8));
+        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 8, 8));
         inputPanel.setBorder(BorderFactory.createTitledBorder("Tambah Mahasiswa Bimbingan"));
 
         inputPanel.add(new JLabel("Nama Mahasiswa:"));
@@ -65,10 +64,13 @@ public class SiaptaApp extends JFrame {
         nimField = new JTextField();
         inputPanel.add(nimField);
 
-        JButton tambahButton = new JButton("Tambah");
-        JButton tampilButton = new JButton("Lihat Daftar");
+        JButton tambahButton = new JButton("Tambah Mahasiswa");
+        JButton tampilButton = new JButton("Lihat Daftar Mahasiswa");
+        JButton lihatDosenButton = new JButton("Lihat Dosen Pembimbing"); // Fitur baru US-004
+
         inputPanel.add(tambahButton);
         inputPanel.add(tampilButton);
+        inputPanel.add(lihatDosenButton);
 
         add(inputPanel, BorderLayout.NORTH);
 
@@ -77,6 +79,7 @@ public class SiaptaApp extends JFrame {
         outputArea.setFont(new Font("Consolas", Font.PLAIN, 13));
         outputArea.setBorder(BorderFactory.createTitledBorder("Daftar Mahasiswa Bimbingan"));
         add(new JScrollPane(outputArea), BorderLayout.CENTER);
+
 
         tambahButton.addActionListener(e -> {
             String nama = namaField.getText().trim();
@@ -108,8 +111,27 @@ public class SiaptaApp extends JFrame {
             }
         });
 
+
         tampilButton.addActionListener(e -> tampilkanDaftarMahasiswa());
+
+
+        lihatDosenButton.addActionListener(e -> {
+            if (dosen != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Dosen Pembimbing:\n" +
+                                "Nama: " + dosen.getNama() + "\n" +
+                                "NIP: " + dosen.getNip(),
+                        "Informasi Dosen Pembimbing",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Data dosen pembimbing belum tersedia!",
+                        "Peringatan",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        });
     }
+
 
     private void tampilkanDaftarMahasiswa() {
         outputArea.setText("");
@@ -125,6 +147,7 @@ public class SiaptaApp extends JFrame {
             }
         }
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new SiaptaApp().setVisible(true));
